@@ -47,11 +47,7 @@ See [`.env.example`](.env.example) and [`docs/STATS.md`](docs/STATS.md) for deta
 
 ## Deploying to Vercel
 
-1. Push this repository to GitHub/GitLab and import it in Vercel (framework preset: Next.js, package manager: pnpm).
-2. In the Vercel project go to **Storage → Marketplace → Upstash for Redis** and create a free database; it injects `KV_REST_API_URL` / `KV_REST_API_TOKEN` automatically. Pick the region closest to your Vercel function region.
-3. Add the remaining env vars under **Settings → Environment Variables** (`ADMIN_PASSWORD`, `RATE_LIMIT_SALT`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_INSTAGRAM_URL`, `NEXT_PUBLIC_TIKTOK_URL`).
-4. Deploy. Add your subdomain under **Settings → Domains** and set `NEXT_PUBLIC_SITE_URL` to it (then redeploy so share links use it).
-5. Open `/admin`, log in, take the quiz once and confirm the participant count increments.
+Full step-by-step guide: [docs/DEPLOY.md](docs/DEPLOY.md) (import the repo, add Upstash Redis from the Vercel Marketplace, set the environment variables, attach the subdomain, verify).
 
 ## Testing notes
 
