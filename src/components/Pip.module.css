@@ -1,0 +1,320 @@
+/*
+ * Pip mascot styles. The wrapper carries `data-mood` (and `data-rm="1"` when
+ * the reduceMotion prop is set). Face parts crossfade with opacity; body
+ * motion lives entirely inside the reduced-motion guard at the bottom.
+ * Geometry/pivots mirror src/components/pip-geometry.ts (FACE, POSE, PIVOT).
+ */
+
+.pip {
+  display: inline-block;
+  flex: none;
+  line-height: 0;
+  vertical-align: middle;
+}
+
+.pip > svg {
+  display: block;
+  overflow: visible;
+}
+
+/* Question-card corner: only the top 60 % peeks out. */
+.pip[data-mood="peek"] {
+  clip-path: inset(0 0 40% 0);
+}
+
+/* ---------- face parts: hidden by default, 150 ms opacity crossfade ---------- */
+
+.eyeL,
+.eyeR,
+.hapL,
+.hapR,
+.starL,
+.starR,
+.brow,
+.mouthSmile,
+.mouthGrin,
+.mouthO,
+.mouthFlat,
+.bulb,
+.thumb,
+.sparkle,
+.dot {
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.pip[data-mood="idle"] :is(.eyeL, .eyeR, .mouthSmile),
+.pip[data-mood="thinking"] :is(.eyeL, .eyeR, .brow, .mouthFlat),
+.pip[data-mood="correct"] :is(.hapL, .hapR, .mouthGrin, .sparkle),
+.pip[data-mood="curious"] :is(.eyeL, .eyeR, .mouthO, .bulb),
+.pip[data-mood="encouraging"] :is(.eyeL, .hapR, .mouthSmile, .thumb),
+.pip[data-mood="celebrating"] :is(.starL, .starR, .mouthGrin),
+.pip[data-mood="peek"] :is(.eyeL, .eyeR, .brow, .mouthFlat) {
+  opacity: 1;
+}
+
+/* ---------- pivots (user units of the 120×120 viewBox) ---------- */
+
+.fig {
+  transform-box: view-box;
+  transform-origin: 60px 108px;
+}
+
+.tilt {
+  transform-box: view-box;
+  transform-origin: 60px 84px;
+}
+
+.armL {
+  transform-box: view-box;
+  transform-origin: 18px 74px;
+}
+
+.armR {
+  transform-box: view-box;
+  transform-origin: 102px 74px;
+}
+
+.bulb {
+  transform-box: view-box;
+  transform-origin: 96px 38px;
+}
+
+.eyeL,
+.eyeR,
+.sparkle {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* ---------- static poses (kept under reduced motion, just not animated) ---------- */
+
+.pip[data-mood="thinking"] .tilt {
+  transform: rotate(4deg);
+}
+
+.pip[data-mood="curious"] .tilt {
+  transform: rotate(6deg);
+}
+
+.pip:is([data-mood="thinking"], [data-mood="peek"]) :is(.eyeL, .eyeR) {
+  transform: translate(3px, -3px);
+}
+
+.pip[data-mood="curious"] :is(.eyeL, .eyeR) {
+  transform: scaleY(1.17);
+}
+
+.pip:is([data-mood="correct"], [data-mood="celebrating"]) .armL {
+  transform: rotate(120deg);
+}
+
+.pip:is([data-mood="correct"], [data-mood="celebrating"]) .armR {
+  transform: rotate(-120deg);
+}
+
+.pip[data-mood="encouraging"] .armR {
+  transform: rotate(-90deg);
+}
+
+/* ---------- motion: only without prefers-reduced-motion and without data-rm ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .pip:not([data-rm="1"]) .tilt {
+    transition: transform 160ms ease-out;
+  }
+
+  .pip:not([data-rm="1"]) :is(.armL, .armR) {
+    transition: transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .pip:not([data-rm="1"]) :is(.eyeL, .eyeR) {
+    transition:
+      opacity 150ms ease,
+      transform 160ms ease-out;
+  }
+
+  /* idle + peek: float, blink */
+  .pip:not([data-rm="1"]):is([data-mood="idle"], [data-mood="peek"]) .fig {
+    animation: pipFloat 2.4s ease-in-out infinite;
+  }
+
+  .pip:not([data-rm="1"])[data-mood="idle"] :is(.eyeL, .eyeR) {
+    animation: pipBlink 3.5s linear infinite;
+  }
+
+  /* thinking: three faint dots pulse after 3 s */
+  .pip:not([data-rm="1"])[data-mood="thinking"] .dot {
+    animation: pipPulse 1.2s ease-in-out infinite;
+    animation-delay: 3s;
+  }
+
+  .pip:not([data-rm="1"])[data-mood="thinking"] .dot:nth-child(2) {
+    animation-delay: 3.2s;
+  }
+
+  .pip:not([data-rm="1"])[data-mood="thinking"] .dot:nth-child(3) {
+    animation-delay: 3.4s;
+  }
+
+  /* correct: squash-stretch hop, sparkles pop with a 60 ms stagger */
+  .pip:not([data-rm="1"])[data-mood="correct"] .fig {
+    animation: pipHop 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .pip:not([data-rm="1"])[data-mood="correct"] .sparkle {
+    animation: pipPop 700ms ease-out forwards;
+  }
+
+  .pip:not([data-rm="1"])[data-mood="correct"] .sparkle:nth-child(2) {
+    animation-delay: 60ms;
+  }
+
+  .pip:not([data-rm="1"])[data-mood="correct"] .sparkle:nth-child(3) {
+    animation-delay: 120ms;
+  }
+
+  /* curious: the idea bulb springs in */
+  .pip:not([data-rm="1"])[data-mood="curious"] .bulb {
+    animation: pipSpring 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* celebrating: bounce ×3 then float; arms wave for 1.2 s then hold */
+  .pip:not([data-rm="1"])[data-mood="celebrating"] .fig {
+    animation:
+      pipBounce 480ms cubic-bezier(0.34, 1.56, 0.64, 1) 3,
+      pipFloat 2.4s ease-in-out 1.44s infinite;
+  }
+
+  .pip:not([data-rm="1"])[data-mood="celebrating"] .armL {
+    animation: pipWaveL 240ms ease-in-out 5 alternate;
+  }
+
+  .pip:not([data-rm="1"])[data-mood="celebrating"] .armR {
+    animation: pipWaveR 240ms ease-in-out 5 alternate;
+  }
+
+  /* kit: drops in when unlocked */
+  .pip:not([data-rm="1"]) .kit {
+    animation: pipDrop 300ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+}
+
+@keyframes pipFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes pipBlink {
+  0%,
+  96.5%,
+  100% {
+    transform: scaleY(1);
+  }
+  98.2% {
+    transform: scaleY(0.1);
+  }
+}
+
+@keyframes pipPulse {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes pipHop {
+  0% {
+    transform: translateY(0) scaleY(1);
+  }
+  25% {
+    transform: translateY(0) scaleY(0.88);
+  }
+  60% {
+    transform: translateY(-10px) scaleY(1.08);
+  }
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+@keyframes pipPop {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.25);
+  }
+  55% {
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+}
+
+@keyframes pipSpring {
+  from {
+    transform: scale(0);
+  }
+  65% {
+    transform: scale(1.15);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes pipBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  45% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes pipWaveL {
+  from {
+    transform: rotate(100deg);
+  }
+  to {
+    transform: rotate(140deg);
+  }
+}
+
+@keyframes pipWaveR {
+  from {
+    transform: rotate(-100deg);
+  }
+  to {
+    transform: rotate(-140deg);
+  }
+}
+
+@keyframes pipDrop {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

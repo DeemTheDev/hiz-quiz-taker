@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- Pip's face (see src/components/pip-geometry.ts) cropped into a lilac circle. Hex colours only. -->
+  <defs>
+    <clipPath id="c"><circle cx="32" cy="32" r="31"/></clipPath>
+    <clipPath id="b"><path transform="translate(-19 -20.7) scale(0.85)" d="M60 24C82 24 106 40 106 68 106 94 88 108 60 108 32 108 14 94 14 68 14 40 38 24 60 24Z"/></clipPath>
+  </defs>
+  <circle cx="32" cy="32" r="31" fill="#F6F1FF"/>
+  <g clip-path="url(#c)">
+    <g transform="translate(-19 -20.7) scale(0.85)">
+      <path d="M60 24C82 24 106 40 106 68 106 94 88 108 60 108 32 108 14 94 14 68 14 40 38 24 60 24Z" fill="#CFC2FF" stroke="#1F1740" stroke-width="3"/>
+    </g>
+    <g clip-path="url(#b)">
+      <g transform="translate(-19 -20.7) scale(0.85)">
+        <ellipse cx="30" cy="57" rx="6.5" ry="4.5" fill="#E6DFFB"/>
+        <ellipse cx="91" cy="53" rx="5" ry="3.5" fill="#E6DFFB"/>
+        <path d="M-4 42Q60 22 124 42L124 56Q60 36 -4 56Z" fill="#BFF2D3" stroke="#1F1740" stroke-width="3"/>
+        <rect x="58.5" y="34" width="3" height="10" fill="#FFFFFF"/>
+        <rect x="55" y="37.5" width="10" height="3" fill="#FFFFFF"/>
+        <path d="M4 90Q30 90 53 93L60 100L67 93Q90 90 116 90V112H4Z" fill="#FFFDF8" stroke="#1F1740" stroke-width="2.5" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <g transform="translate(-19 -20.7) scale(0.85)" stroke-linejoin="round">
+      <path d="M60 24C82 24 106 40 106 68 106 94 88 108 60 108 32 108 14 94 14 68 14 40 38 24 60 24Z" fill="none" stroke="#1F1740" stroke-width="3"/>
+      <circle cx="36" cy="74" r="6" fill="#FFD1D6" opacity="0.8"/>
+      <circle cx="84" cy="74" r="6" fill="#FFD1D6" opacity="0.8"/>
+      <ellipse cx="46" cy="62" rx="5" ry="6" fill="#1F1740"/>
+      <circle cx="44.5" cy="60" r="1.8" fill="#FFFFFF"/>
+      <ellipse cx="74" cy="62" rx="5" ry="6" fill="#1F1740"/>
+      <circle cx="72.5" cy="60" r="1.8" fill="#FFFFFF"/>
+      <path d="M50 80q10 8 20 0" fill="none" stroke="#1F1740" stroke-width="4" stroke-linecap="round"/>
+    </g>
+  </g>
+  <circle cx="32" cy="32" r="31" fill="none" stroke="#1F1740" stroke-width="2"/>
+</svg>

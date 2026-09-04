@@ -1,0 +1,380 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------------ */
+/* Design tokens (see docs/DESIGN.md §2). Pastel surfaces + ink text.        */
+/* ------------------------------------------------------------------------ */
+@theme {
+  /* Surfaces */
+  --color-lilac: #f6f1ff;
+  --color-gauze: #fffdf8;
+  --color-lavender: #cfc2ff;
+  --color-mint: #bff2d3;
+  --color-blush: #ffd1d6;
+  --color-lemon: #ffe7a3;
+  --color-sky: #bde4ff;
+  --color-peach: #ffc9b0;
+  --color-gold: #f7d774;
+  --color-track: #e6dffb;
+
+  /* Text */
+  --color-ink: #1f1740;
+  --color-plum: #3f3a5c;
+  --color-ink-mint: #14532d;
+  --color-ink-blush: #881337;
+  --color-ink-lemon: #78350f;
+  --color-ink-sky: #0c4a6e;
+  --color-ink-peach: #7c2d12;
+
+  /* Edges / accents */
+  --color-violet-edge: #7c5ce6;
+  --color-mint-edge: #2f9e62;
+  --color-blush-edge: #d9536b;
+  --color-violet-700: #5b37c9;
+  --color-focus: #4c1d95;
+
+  /* Radii */
+  --radius-chip: 0.875rem;
+  --radius-sticker: 1.125rem;
+  --radius-card: 1.5rem;
+  --radius-sheet: 1.75rem;
+
+  /* Sticker edges (solid offset shadows) */
+  --shadow-edge: 0 4px 0 #7c5ce6;
+  --shadow-edge-lg: 0 6px 0 #7c5ce6;
+  --shadow-edge-mint: 0 4px 0 #2f9e62;
+  --shadow-edge-blush: 0 4px 0 #d9536b;
+  --shadow-edge-ink: 0 4px 0 #1f1740;
+  --shadow-sheet: 0 -8px 24px rgb(31 23 64 / 0.12);
+  --shadow-toast: 0 8px 20px rgb(31 23 64 / 0.18);
+  --shadow-soft: 0 10px 30px rgb(31 23 64 / 0.08);
+
+  /* Type scale (mobile first) */
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.4;
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.45;
+  --text-body-lg: 1rem;
+  --text-body-lg--line-height: 1.45;
+  --text-option: clamp(0.9375rem, 4vw, 1rem);
+  --text-option--line-height: 1.3;
+  --text-prompt: clamp(1.125rem, 5vw, 1.3125rem);
+  --text-prompt--line-height: 1.25;
+  --text-verdict: 1.375rem;
+  --text-verdict--line-height: 1.2;
+  --text-badge: 1.625rem;
+  --text-badge--line-height: 1.1;
+  --text-title: clamp(1.875rem, 8.5vw, 2.125rem);
+  --text-title--line-height: 1.1;
+  --text-score: clamp(4rem, 18vw, 4.5rem);
+  --text-score--line-height: 1;
+
+  /* Easings */
+  --ease-emph: cubic-bezier(0.2, 0, 0, 1);
+  --ease-in-quick: cubic-bezier(0.4, 0, 1, 1);
+  --ease-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-expo-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Animations */
+  --animate-float: float 2.4s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.8s linear 3;
+  --animate-pulse-soft: pulse-soft 1.2s ease-in-out infinite;
+  --animate-spin-slow: spin 40s linear infinite;
+  --animate-orbit: orbit 26s linear infinite;
+  --animate-drift: drift 20s ease-in-out infinite alternate;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
+  }
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-120%) skewX(-12deg);
+    }
+    100% {
+      transform: translateX(220%) skewX(-12deg);
+    }
+  }
+  @keyframes pulse-soft {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+  @keyframes orbit {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes drift {
+    0% {
+      background-position:
+        10% 10%,
+        90% 20%,
+        50% 95%;
+    }
+    100% {
+      background-position:
+        20% 25%,
+        75% 10%,
+        40% 85%;
+    }
+  }
+}
+
+@theme inline {
+  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-fredoka), var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Compact phones (e.g. 360×640 inside an in-app browser) */
+@custom-variant short (@media (max-height: 560px));
+/* Taller phones get a bit more hero room */
+@custom-variant tall (@media (min-height: 650px));
+
+/* ------------------------------------------------------------------------ */
+/* Base                                                                      */
+/* ------------------------------------------------------------------------ */
+@layer base {
+  html {
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100vh;
+    min-height: 100svh;
+    margin: 0;
+    color: var(--color-ink);
+    background-color: var(--color-lilac);
+    background-image:
+      radial-gradient(360px 360px at 10% 10%, rgb(191 242 211 / 0.35), transparent 70%),
+      radial-gradient(420px 420px at 90% 20%, rgb(189 228 255 / 0.35), transparent 70%),
+      radial-gradient(320px 320px at 50% 95%, rgb(255 231 163 / 0.35), transparent 70%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+    animation: var(--animate-drift);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.45;
+    overscroll-behavior-y: contain;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  button,
+  a,
+  [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 3px;
+    border-radius: var(--radius-chip);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body {
+      animation: none;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* In-page "reduce animations" toggle mirrors the OS preference */
+  html[data-motion="off"] body {
+    animation: none;
+  }
+  html[data-motion="off"] *,
+  html[data-motion="off"] *::before,
+  html[data-motion="off"] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  @media (prefers-contrast: more) {
+    :root {
+      --color-plum: #1f1740;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------------ */
+/* Components                                                                */
+/* ------------------------------------------------------------------------ */
+@layer components {
+  /* Die-cut sticker: 2px outline + solid bottom edge that collapses on press */
+  .sticker {
+    position: relative;
+    background: var(--color-gauze);
+    color: var(--color-ink);
+    border: 2px solid var(--color-violet-edge);
+    border-radius: var(--radius-sticker);
+    box-shadow: var(--shadow-edge);
+    transition: transform 120ms var(--ease-back);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .sticker:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 var(--color-violet-edge);
+    transition-duration: 0ms;
+  }
+  .sticker-primary {
+    background: var(--color-lavender);
+  }
+  .sticker-mint {
+    background: var(--color-mint);
+    border-color: var(--color-mint-edge);
+    box-shadow: var(--shadow-edge-mint);
+  }
+  .sticker-mint:active:not(:disabled) {
+    box-shadow: 0 0 0 var(--color-mint-edge);
+  }
+  .sticker-blush {
+    background: var(--color-blush);
+    border-color: var(--color-blush-edge);
+    box-shadow: var(--shadow-edge-blush);
+  }
+  .sticker-blush:active:not(:disabled) {
+    box-shadow: 0 0 0 var(--color-blush-edge);
+  }
+  .sticker-ink {
+    border-color: var(--color-ink);
+    box-shadow: var(--shadow-edge-ink);
+  }
+  .sticker-ink:active:not(:disabled) {
+    box-shadow: 0 0 0 var(--color-ink);
+  }
+  .sticker-flat {
+    box-shadow: none;
+  }
+  .sticker-flat:active:not(:disabled) {
+    transform: none;
+  }
+
+  /* Small label chip */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    height: 1.75rem;
+    padding: 0 0.625rem;
+    border-radius: var(--radius-chip);
+    border: 2px solid var(--color-ink);
+    font-size: var(--text-caption);
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .eyebrow {
+    font-size: var(--text-caption);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .safe-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Highlighter stroke behind a word */
+  .highlighter {
+    position: relative;
+    display: inline-block;
+    z-index: 0;
+  }
+  .highlighter::before {
+    content: "";
+    position: absolute;
+    left: -0.15em;
+    right: -0.15em;
+    bottom: 0.05em;
+    height: 55%;
+    background: var(--color-lemon);
+    transform: skewX(-6deg) rotate(-2deg);
+    transform-origin: left center;
+    border-radius: 0.25em;
+    z-index: -1;
+    animation: highlighter-draw 320ms var(--ease-emph) 200ms both;
+  }
+  @keyframes highlighter-draw {
+    from {
+      transform: scaleX(0) skewX(-6deg) rotate(-2deg);
+    }
+    to {
+      transform: scaleX(1) skewX(-6deg) rotate(-2deg);
+    }
+  }
+
+  /* CTA shimmer sweep (3 sweeps max) */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 40%;
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.55), transparent);
+    animation: var(--animate-shimmer);
+    pointer-events: none;
+  }
+
+  /* Visually hidden but available to screen readers */
+  .sr-only-live {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
